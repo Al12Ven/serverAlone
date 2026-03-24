@@ -17,33 +17,14 @@ if($_POST !== null){
     // Получение объекта PDO
     $pdo = new PDO($dsn, $user, $pass, $opt);
 
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $role = $_POST['role'] ?? 'viewer';
-    $artist_name = $_POST['artist_name'] ?? null;
-    $artist_country = $_POST['artist_country'] ?? null;
-    $artist_genre = $_POST['artist_genre'] ?? null;
-
-    // Хеширование пароля
-    $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-    // Если роль artist и указан artist_name - создаем исполнителя
-    $artist_id = null;
-    if ($role === 'artist' && $artist_name) {
-        $stmt = $pdo->prepare("INSERT INTO artists (name, country, genre) VALUES (?, ?, ?)");
-        $stmt->execute([$artist_name, $artist_country, $artist_genre]);
-        $artist_id = $pdo->lastInsertId();
-    }
+    $name = $_POST['name'];
+    $email_signup = $_POST['email_signup'];
+    $password_signup = $_POST['password_signup'];
+    $password_confirm = $_POST['password_confirm'];
 
     // Регистрация пользователя
-    $stmt = $pdo->prepare("INSERT INTO users (username, email, password_hash, role, artist_id) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bindParam(1, $username);
-    $stmt->bindParam(2, $email);
-    $stmt->bindParam(3, $password_hash);
-    $stmt->bindParam(4, $role);
-    $stmt->bindParam(5, $artist_id, PDO::PARAM_INT);
-    $stmt->execute();
+    $stmt = $pdo->prepare("INSERT INTO users (name, email_signup, password_signup, password_confirm) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$name, $email_signup, $password_signup, $password_confirm]);
 
     echo json_encode(['status' => 'success', 'message' => 'Регистрация успешна']);
 }else{
