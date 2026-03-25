@@ -1,3 +1,14 @@
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
+    // Подключаем классы
+    require_once 'Database.php';
+    require_once 'ApplicationHandler.php';
+
+    // Устанавливаем заголовок для JSON-ответа
+    header('Content-Type: application/json');
+
+    // Разрешаем CORS для локальной разработки
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Headers: Content-Type');
 </IfModule>
